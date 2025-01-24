@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class VoterDashboard extends StatelessWidget {
+  const VoterDashboard({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

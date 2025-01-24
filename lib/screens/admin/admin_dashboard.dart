@@ -1,14 +1,21 @@
+import 'package:ch_vote/screens/admin/admin_registration.dart';
 import 'package:flutter/material.dart';
 
 class AdminDashboard extends StatelessWidget {
   const AdminDashboard({super.key});
 
   void navigateToRegistration(BuildContext context) {
-    Navigator.pushNamed(context, '/registration');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AdminRegistration()),
+    );
   }
 
   void navigateToVotersList(BuildContext context) {
-    Navigator.pushNamed(context, '/votersList');
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => Voters),
+    // );
   }
   
   @override

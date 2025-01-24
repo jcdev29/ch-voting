@@ -1,14 +1,35 @@
-class VotersInformation {
-  final String firstName;
-  final String middleName;
-  final String lastName;
-  final String sex;
-  final String birthdate;
-  final String address;
-  final String contactNumber;
-  final String emailAddress;
+import 'package:hive/hive.dart';
 
-  VotersInformation({
+part 'hive_voters_info.g.dart';
+
+@HiveType(typeId: 1)
+class HiveVotersInfo {
+  @HiveField(0)
+  String firstName;
+
+  @HiveField(1)
+  String middleName;
+
+  @HiveField(2)
+  String lastName;
+
+  @HiveField(3)
+  String sex;
+
+  @HiveField(4)
+  String birthdate;
+
+  @HiveField(5)
+  String address;
+
+  @HiveField(6)
+  String contactNumber;
+
+  @HiveField(7)
+  String emailAddress;
+
+
+  HiveVotersInfo({
     required this.firstName,
     required this.middleName,
     required this.lastName,
@@ -19,7 +40,7 @@ class VotersInformation {
     required this.emailAddress,
   });
 
-  // Convert a VotersInformation object into a JSON map
+  // Convert a CitizenInformation object into a JSON map
   Map<String, dynamic> toJson() {
     return {
       'firstName': firstName,
@@ -33,9 +54,9 @@ class VotersInformation {
     };
   }
 
-  // Create a VotersInformation object from a JSON map
-  factory VotersInformation.fromJson(Map<String, dynamic> json) {
-    return VotersInformation(
+  // Create a CitizenInformation object from a JSON map
+  factory HiveVotersInfo.fromJson(Map<String, dynamic> json) {
+    return HiveVotersInfo(
       firstName: json['firstName'],
       middleName: json['middleName'],
       lastName: json['lastName'],
