@@ -14,10 +14,9 @@ class AdminRegistration extends StatefulWidget {
 
 class _AdminRegistrationState extends State<AdminRegistration> {
   final _formKey = GlobalKey<FormState>();
-
   final TextEditingController _birthdateController = TextEditingController();
 
-  String? _selectedSex; // State variable for dropdown selection
+  String? _selectedSex;
 
   final _voterData = HiveVotersInfo(
     firstName: '',
@@ -35,36 +34,68 @@ class _AdminRegistrationState extends State<AdminRegistration> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Voter Registration'),
+        centerTitle: true,
+        backgroundColor: Colors.deepPurple,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: ListView(
-            children: <Widget>[
-              _buildTextField(
-                  'First Name', (value) => _voterData.firstName = value),
-              _buildTextField(
-                  'Middle Name', (value) => _voterData.middleName = value),
-              _buildTextField(
-                  'Last Name', (value) => _voterData.lastName = value),
-              _buildDropdownField('Sex', ['Male', 'Female', 'Other'],
-                  (value) => _voterData.sex = value!),
-              _buildDateField(
-                  'Birthdate', (value) => _voterData.birthdate = value),
-              _buildTextField('Address', (value) => _voterData.address = value),
-              _buildTextField(
-                  'Contact Number', (value) => _voterData.contactNumber = value,
-                  keyboardType: TextInputType.phone),
-              _buildTextField(
-                  'Email Address', (value) => _voterData.emailAddress = value,
-                  keyboardType: TextInputType.emailAddress),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _registerVoter,
-                child: const Text('Register'),
-              ),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                _buildTextField(
+                  'First Name',
+                  (value) => _voterData.firstName = value,
+                ),
+                _buildTextField(
+                  'Middle Name',
+                  (value) => _voterData.middleName = value,
+                ),
+                _buildTextField(
+                  'Last Name',
+                  (value) => _voterData.lastName = value,
+                ),
+                _buildDropdownField(
+                  'Sex',
+                  ['Male', 'Female', 'Other'],
+                  (value) => _voterData.sex = value!,
+                ),
+                _buildDateField(
+                  'Birthdate',
+                  (value) => _voterData.birthdate = value,
+                ),
+                _buildTextField(
+                  'Address',
+                  (value) => _voterData.address = value,
+                ),
+                _buildTextField(
+                  'Contact Number',
+                  (value) => _voterData.contactNumber = value,
+                  keyboardType: TextInputType.phone,
+                ),
+                _buildTextField(
+                  'Email Address',
+                  (value) => _voterData.emailAddress = value,
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _registerVoter,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    backgroundColor: Colors.deepPurple,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                  ),
+                  child: const Text(
+                    'Register',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

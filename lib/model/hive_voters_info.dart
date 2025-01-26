@@ -28,6 +28,15 @@ class HiveVotersInfo {
   @HiveField(7)
   String emailAddress;
 
+  @HiveField(8)
+  String? chosenPresident;
+
+  @HiveField(9)
+  String? chosenVicePresident;
+
+  @HiveField(10)
+  List<String>? chosenSenators;
+
 
   HiveVotersInfo({
     required this.firstName,
@@ -38,9 +47,12 @@ class HiveVotersInfo {
     required this.address,
     required this.contactNumber,
     required this.emailAddress,
+    this.chosenPresident,
+    this.chosenVicePresident,
+    this.chosenSenators,
   });
 
-  // Convert a CitizenInformation object into a JSON map
+  // Convert a VoterInformation object into a JSON map
   Map<String, dynamic> toJson() {
     return {
       'firstName': firstName,
@@ -51,10 +63,13 @@ class HiveVotersInfo {
       'address': address,
       'contactNumber': contactNumber,
       'emailAddress': emailAddress,
+      'chosenPresident': chosenPresident,
+      'chosenVicePresident': chosenVicePresident,
+      'chosenSenators': chosenSenators,
     };
   }
 
-  // Create a CitizenInformation object from a JSON map
+  // Create a VoterInformation object from a JSON map
   factory HiveVotersInfo.fromJson(Map<String, dynamic> json) {
     return HiveVotersInfo(
       firstName: json['firstName'],
@@ -65,6 +80,9 @@ class HiveVotersInfo {
       address: json['address'],
       contactNumber: json['contactNumber'],
       emailAddress: json['emailAddress'],
+      chosenPresident: json['chosenPresident'],
+      chosenVicePresident: json['chosenVicePresident'],
+      chosenSenators: json['chosenSenators'],
     );
   }
 }

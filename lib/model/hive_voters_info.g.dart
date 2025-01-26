@@ -25,13 +25,16 @@ class HiveVotersInfoAdapter extends TypeAdapter<HiveVotersInfo> {
       address: fields[5] as String,
       contactNumber: fields[6] as String,
       emailAddress: fields[7] as String,
+      chosenPresident: fields[8] as String?,
+      chosenVicePresident: fields[9] as String?,
+      chosenSenators: (fields[10] as List?)?.cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, HiveVotersInfo obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.firstName)
       ..writeByte(1)
@@ -47,7 +50,13 @@ class HiveVotersInfoAdapter extends TypeAdapter<HiveVotersInfo> {
       ..writeByte(6)
       ..write(obj.contactNumber)
       ..writeByte(7)
-      ..write(obj.emailAddress);
+      ..write(obj.emailAddress)
+      ..writeByte(8)
+      ..write(obj.chosenPresident)
+      ..writeByte(9)
+      ..write(obj.chosenVicePresident)
+      ..writeByte(10)
+      ..write(obj.chosenSenators);
   }
 
   @override
