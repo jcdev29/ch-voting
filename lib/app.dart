@@ -1,3 +1,4 @@
+import 'package:ch_vote/screens/fingerprint_scanner_screen.dart';
 import 'package:ch_vote/screens/login.dart';
 import 'package:flutter/material.dart';
 
@@ -8,12 +9,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demoo',
+      title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Login(),
+      home: const FingerprintScannerPage(),
     );
   }
 }
