@@ -1,4 +1,4 @@
-package com.example.ch_vote  
+package com.example.ch_vote
 
 import android.content.Context
 import android.os.Handler
@@ -7,12 +7,13 @@ import android.util.Log
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.MethodCall
 import java.lang.Exception
 
-// Import the HeroFun API classes 
-import com.mx.finger.HeroFunApiFactory
-import com.mx.finger.HeroFunApi
+// Updated import paths based on JAR analysis
+import com.mx.finger.api.herofun.HeroFunApiFactory
+import com.mx.finger.api.herofun.HeroFunApi
+import com.mx.finger.common.MxImage
+import com.mx.finger.common.Result
 
 class MainActivity: FlutterActivity() {
     private val CHANNEL = "com.example.ch_vote/fingerprint"
@@ -24,35 +25,23 @@ class MainActivity: FlutterActivity() {
         
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
             when (call.method) {
-                "initFingerprintSensor" -> {
-                    initFingerprintSensor(result)
-                }
-                "openDevice" -> {
-                    openDevice(result)
-                }
-                "closeDevice" -> {
-                    closeDevice(result)
-                }
-                "isDeviceOpened" -> {
-                    isDeviceOpened(result)
-                }
+                "initFingerprintSensor" -> initFingerprintSensor(result)
+                "openDevice" -> openDevice(result)
+                "closeDevice" -> closeDevice(result)
+                "isDeviceOpened" -> isDeviceOpened(result)
                 "getImage" -> {
                     val acceptScore = call.argument<Int>("acceptScore") ?: 0
                     val timeout = call.argument<Long>("timeout") ?: 0L
                     getImage(acceptScore, timeout, result)
                 }
-                // Add more methods for different fingerprint operations
-                else -> {
-                    result.notImplemented()
-                }
+                else -> result.notImplemented()
             }
         }
     }
     
     private fun initFingerprintSensor(result: MethodChannel.Result) {
         try {
-            // Initialize the API with USB mode for FCM360
-            heroFunApi = HeroFunApiFactory.get(context, HeroFunApiFactory.MODE_USB_360)
+            heroFunApi = HeroFunApiFactory.get(applicationContext, HeroFunApiFactory.MODE_USB_360)
             result.success(true)
         } catch (e: Exception) {
             Log.e("FingerprintChannel", "Error initializing sensor", e)
@@ -61,7 +50,6 @@ class MainActivity: FlutterActivity() {
     }
     
     private fun openDevice(result: MethodChannel.Result) {
-        // Since openDevice() is a blocking operation, run it on a background thread
         Thread {
             try {
                 val openResult = heroFunApi.openDevice()
@@ -112,15 +100,20 @@ class MainActivity: FlutterActivity() {
         Thread {
             try {
                 val imageResult = heroFunApi.getImage(acceptScore, timeout)
+                
+                // Log available methods in Result class
+                Log.d("Debug", "Available methods: " + imageResult::class.java.methods.joinToString { it.name })
+                
+                // Try alternative method names
+                val mxImage = imageResult.javaClass.getMethod("x03").invoke(imageResult) as? MxImage
+                val errorCode = imageResult.javaClass.getMethod("x14").invoke(imageResult) as? Int
+                
                 mainHandler.post {
-                    if (imageResult.isSuccess()) {
-                        val mxImage = imageResult.getData()
-                        // Convert MxImage to format that can be sent to Flutter
-                        // For example, convert raw byte array to base64 string
-                        val rawImageData = mxImage.getRawData()
+                    if (mxImage != null) {
+                        val rawImageData = mxImage.javaClass.getMethod("getRawData").invoke(mxImage) as? ByteArray
                         result.success(rawImageData)
                     } else {
-                        result.error("IMAGE_ERROR", "Failed to get image. Error code: ${imageResult.getErrCode()}", null)
+                        result.error("IMAGE_ERROR", "Failed to get image. Error code: $errorCode", null)
                     }
                 }
             } catch (e: Exception) {
@@ -130,6 +123,4 @@ class MainActivity: FlutterActivity() {
             }
         }.start()
     }
-    
-    // Add more methods 
 }
